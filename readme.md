@@ -17,6 +17,6 @@ py -m venv .venv
 
 
 
-## Reference
-[How to Create a Photo Mosaic in Python](https://towardsdatascience.com/how-to-create-a-photo-mosaic-in-python-45c94f6e8308)
-[BilHim @ github](https://gist.github.com/BilHim)
+# Reference
+- [How to Create a Photo Mosaic in Python](https://towardsdatascience.com/how-to-create-a-photo-mosaic-in-python-45c94f6e8308)
+- [BilHim @ github](https://gist.github.com/BilHim)
