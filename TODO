@@ -1,0 +1,9 @@
+# target
+- select source image
+- select tile directory
+- set output lego dimention, how many tiles in width and height
+- export result
+
+
+# ultimate
+- adjust source image: scale, contrast, brightness, gamma, saturation ...

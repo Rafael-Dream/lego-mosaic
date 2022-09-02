@@ -1,25 +1,36 @@
+import os
 import sys
 import glob
 from PIL import Image
 from scipy import spatial
 import numpy as np
 
-main_photo_path = './img_src/20220120.jpg'
-tile_photos_path = './tile_pool/31198_Beatles'
-tile_size = (int(sys.argv[3]), int(sys.argv[4]))
-output_path = sys.argv[5]
+before_start_let_do_some_calcuation = """
+Source Lego set is 31204 Elvis Presley.
+Contains 9 pc 16 x 16, which means width: 48, height: 48 (in Lego unit)
+
+Every tile image is 30 x 30 pixels, so output image size will be 1440 x 1440 pixels
+
+Notice: source image need to be squre
+"""
+
+main_photo_path = './image/test_1440-2.jpg'
+tiles_img_path = './tile_pool/31204_Elvis/*.jpg'
+tile_size = (30, 30)
+outputHead, outputTail = os.path.splitext(main_photo_path)
+output_path = f"{outputHead}.legoize{outputTail}"
 
 # Get all tiles
 tile_paths = []
-for file in glob.glob(tile_photos_path):
+for file in glob.glob(tiles_img_path):
     tile_paths.append(file)
 
 
 # Import and resize all tiles
 tiles = []
-for path in tile_paths:
-    tile = Image.open(path)
-    tile = tile.resize(tile_size)
+for tile_path in tile_paths:
+    tile = Image.open(tile_path)
+    # tile = tile.resize(tile_size)     # Tile image should be 30 x 30 px
     tiles.append(tile)
 
 
@@ -49,7 +60,15 @@ for i in range(width):
 
 
 # Create an output image
-output = Image.new('RGB', main_photo.size)
+outputImg = Image.new('RGB', main_photo.size)
+
+# Count tiles
+tileCount = []
+for tile_path in tile_paths:
+    tileDir, tileFileName = os.path.split(tile_path)
+    tileName, tileExt = os.path.splitext(tileFileName)
+    count = [tileName, 0]
+    tileCount.append(count)
 
 # Draw tiles
 for i in range(width):
@@ -59,7 +78,13 @@ for i in range(width):
         # Index of tile
         index = closest_tiles[i, j]
         # Draw tile
-        output.paste(tiles[index], (x, y))
+        outputImg.paste(tiles[index], (x, y))
+        # Count tile
+        tileCount[index][1] += 1
 
 # Save output
-output.save(output_path)
+if os.path.exists(output_path):
+    os.remove(output_path)
+outputImg.save(output_path)
+
+print(tileCount)
