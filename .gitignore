@@ -2,7 +2,7 @@
 *.lnk
 *.zip
 hello.py
-
+tile_pool/*/*.png
 
 # -- Python ignore template --
 
