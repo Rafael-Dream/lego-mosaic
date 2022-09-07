@@ -31,7 +31,7 @@ def create_mosaic(main_photo_path: str, tiles_img_path: str):
     tiles = []
     for tile_path in tile_paths:
         tile = Image.open(tile_path)
-        # tile = tile.resize(tile_size)     # Tile image should be 30 x 30 px
+        # tile = tile.resize(tile_size)     # Tile image should be 30 x 30 px, skip this step
         tiles.append(tile)
 
 
@@ -41,24 +41,25 @@ def create_mosaic(main_photo_path: str, tiles_img_path: str):
         mean_color = np.array(tile).mean(axis=0).mean(axis=0)
         colors.append(mean_color)
 
-
+#---------------------------
+# TODO: Change this section.
+# 1. Consider highlight
+# 2. Consider brick limit count
+#---------------------------
     # Pixelate (resize) main photo
     main_photo = Image.open(main_photo_path)
-
     width = int(np.round(main_photo.size[0] / tile_size[0]))
     height = int(np.round(main_photo.size[1] / tile_size[1]))
-
     resized_photo = main_photo.resize((width, height))
 
     # Find closest tile photo for every pixel
     tree = spatial.KDTree(colors)
     closest_tiles = np.zeros((width, height), dtype=np.uint32)
-
     for i in range(width):
         for j in range(height):
             closest = tree.query(resized_photo.getpixel((i, j)))
             closest_tiles[i, j] = closest[1]
-
+#---------------------------
 
     # Create an output image
     outputImg = Image.new('RGB', main_photo.size)
