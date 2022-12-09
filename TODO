@@ -8,8 +8,6 @@
 # ultimate
 - adjust source image: scale, contrast, brightness, gamma, saturation ...
 
-
+https://towardsdatascience.com/how-to-create-a-photo-mosaic-in-python-45c94f6e8308
 https://pypi.org/project/photomosaic
 https://danielballan.github.io/photomosaic/docs/install.html
-
-test2

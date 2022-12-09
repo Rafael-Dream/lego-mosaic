@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>__TITLE__</title>
+  <script src="attrchange.js"></script>
+  <script src="sample.js"></script>
+  <style>
+    body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    .inline {display: inline-block;}
+    .bgWhite {background-color: #fff;}
+    .txtWhite {color: #fff;}
+    .txtRed {color: #ff0000;}
+    .template {display: none;}
+
+    .info-pane {
+      display: inline-block;
+      width: 300px;
+    }
+    .edit-pane {
+      display: inline-block;
+      vertical-align: top;
+      width: calc(100% - 350px);
+    }
+    .info {margin-bottom: 3px;}
+    .info>div {vertical-align: middle;}
+    .info>.tile {
+      border: 1px solid #000;
+      border-radius: 6px;
+      text-align: center;
+      line-height: 28px;
+    }
+    .info>.sn {
+      width: calc(calc(100% - 30px) * 0.3);
+    }
+    .info>.limit {
+      text-align: right;
+      width: calc(calc(100% - 30px) * 0.2);
+    }
+    .info>.used {
+      text-align: right;
+      width: calc(calc(100% - 30px) * 0.2);
+    }
+
+    .tile {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      box-sizing: border-box;
+    }
+
+    .edit-pane > div {
+      height: 15px;
+    }
+    .edit-pane .tile {
+      width: 15px;
+      height: 15px;
+      border: 1px solid silver;
+      border-top: 0px;
+      border-left: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div class="template">
+    <div class="info" data-name="" data-limit="" data-used="">
+      <div class="tile"></div>
+      <div class="inline sn"></div>
+      <div class="inline limit"></div>
+      <div class="inline used"></div>
+    </div>
+
+    <div class="tile" data-x="x" data-y="y"></div>
+  </div>
+
+  <div>
+    <div class="info-pane"></div>
+    <div class="edit-pane"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function(){
+      document.title = pageTitle;
+      addHeaderStyle();
+      addInfoTiles();
+      let isDev = true;
+      addImgTiles(isDev);
+      bindChangeEvents();
+
+      function getCssClassName(tileName) {
+        return `T${tileName}`
+      }
+
+      function addHeaderStyle() {
+        let headerStyle = document.createElement('style');
+        tiles.forEach(tile => {
+          headerStyle.innerHTML += `  .${getCssClassName(tile.name)} { background-color: ${tile.color} }\n`;
+        });
+        document.head.appendChild(headerStyle);
+      }
+
+      function addInfoTiles() {
+        const tmplInfo = document.querySelector('.template > .info');
+        const infoPane = document.querySelector('.info-pane');
+
+        let infoHead = tmplInfo.cloneNode(true);
+        infoHead.querySelector('.tile').classList.add('bgWhite');
+        infoHead.querySelector('.tile').classList.add('bgWhite');
+        infoHead.querySelector('.sn').textContent = "Brick ID";
+        infoHead.querySelector('.limit').textContent = "Limit";
+        infoHead.querySelector('.used').textContent = "Used";
+        infoPane.appendChild(infoHead);
+
+        tiles.forEach(tile => {
+          let infoElm = tmplInfo.cloneNode(true);
+          cssClassName = getCssClassName(tile.name)
+          infoElm.setAttribute("data-name", tile.name);
+          infoElm.setAttribute("data-limit", tile.limit);
+          infoElm.setAttribute("data-used", tile.used);
+          let names = tile.name.split("-");
+          infoElm.querySelector('.tile').classList.add(cssClassName);
+          infoElm.querySelector('.tile').textContent = names[0];
+          if (isTooDark(tile.color)) {
+            infoElm.querySelector('.tile').classList.add('txtWhite');
+          }
+          infoElm.querySelector('.sn').textContent = names[1];
+          infoElm.querySelector('.limit').textContent = tile.limit;
+          infoElm.querySelector('.used').textContent = tile.used;
+          if ((tile.limit - tile.used) < 0) {
+            infoElm.querySelector('.used').classList.add('txtRed');
+          }
+
+          infoPane.appendChild(infoElm);
+        });
+      }
+
+      function isTooDark(colorStr) {
+        // https://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
+        var c = colorStr.substring(1);      // strip #
+        var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+        var r = (rgb >> 16) & 0xff;  // extract red
+        var g = (rgb >>  8) & 0xff;  // extract green
+        var b = (rgb >>  0) & 0xff;  // extract blue
+
+        var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+        return luma < 60;
+      }
+
+      function addImgTiles(isDev) {
+        const tmplTile = document.querySelector('.template>.tile');
+        const editPane = document.querySelector('.edit-pane');
+
+        imgTiles.forEach((rowIdxs, y)=>{
+          if (isDev && y>1) return;
+          let rowDiv = document.createElement('div');
+          rowIdxs.forEach((idx, x)=>{
+            let tileElm = tmplTile.cloneNode(true);
+            let tileData = tiles[idx];
+            tileElm.classList.add(getCssClassName(tileData.name))
+            tileElm.setAttribute("data-x", x);
+            tileElm.setAttribute("data-y", y);
+            rowDiv.appendChild(tileElm);
+          })
+          editPane.appendChild(rowDiv);
+        })
+      }
+
+      function bindEditorEvents() {
+        //todo:
+        //  click tile to show color plate
+        //  click new color to preview tile color changing
+        //  click apply to change tile color, and change tile summary
+        //  click dismiss to hide color plate
+      }
+
+      function bindChangeEvents() {
+        $(selector).attrchange({
+          trackValues: true, /* Default to false, if set to true the event object is
+                updated with old and new value.*/
+          callback: function (event) {
+              //event    	          - event object
+              //event.attributeName - Name of the attribute modified
+              //event.oldValue      - Previous value of the modified attribute
+              //event.newValue      - New value of the modified attribute
+              //Triggered when the selected elements attribute is added/updated/removed
+          }
+        });
+      }
+    })
+  </script>
+</body>
+</html>

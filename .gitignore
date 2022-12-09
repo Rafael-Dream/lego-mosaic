@@ -112,6 +112,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.venv2
 env/
 venv/
 ENV/
@@ -128,10 +129,17 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# vscode
+.vscode
+
 # mypy
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+#image
+image/*
+color_pool/
 
 # Pyre type checker
 .pyre/
