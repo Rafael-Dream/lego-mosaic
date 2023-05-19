@@ -142,9 +142,9 @@ def create_mosaic(main_photo_path: str, tiles_img_path: str, tile_limit):
     # Text summary
     txtPath = common.getOutputPath(main_photo_path, "lib-trad-man", ".txt")
     outputSummary(tileCount, tile_limit, txtPath)
-    
-    # Generate html editor for further fine tune
-    genEditor.run(output_path, tiles_img_path, tile_limit)
+
+    # TODO: Generate html editor for further fine tune
+    # genEditor.run(output_path, tiles_img_path, tile_limit)
 
 
 

@@ -15,15 +15,12 @@ Contains 9 pc 16 x 16, which means width: 48, height: 48 (in Lego unit)
 
 Every tile image is 30 x 30 pixels, so output image size will be 1440 x 1440 pixels
 
-Notice: source image need to be squre
+Notice:
+1)import tile_31204: using Lego 31204 Elvis Presley as template
+2)input_photo_path: source image need to be squre
 """
 
 
-main_photo_path = './image/test-mayday/test_1440-3.jpg'
-main_photo_path = './image/test2/B-1440.jpg'
+input_photo_path = './image/sample.jpg'
 
-traditional.create_mosaic(os.path.join(common.ROOT_DIR, main_photo_path), os.path.join(common.ROOT_DIR, tile_31204.tileColorPath), tile_31204.tileCount)
-# traditional2.create_mosaic(os.path.join(common.ROOT_DIR, main_photo_path), os.path.join(common.ROOT_DIR, tile_31204.tileColorPath))
-# photomosaic.create_mosaic(os.path.join(common.ROOT_DIR, main_photo_path), os.path.join(common.ROOT_DIR, tile_31204.tileColorPath))
-
-
+traditional.create_mosaic(os.path.join(common.ROOT_DIR, input_photo_path), os.path.join(common.ROOT_DIR, tile_31204.tileColorPath), tile_31204.tileCount)

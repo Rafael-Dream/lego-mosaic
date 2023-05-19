@@ -56,9 +56,25 @@
     .edit-pane .tile {
       width: 15px;
       height: 15px;
-      border: 1px solid silver;
+      border: 1px solid #c0c0c0;
       border-top: 0px;
       border-left: 0px;
+    }
+
+    .ok {
+      background-color: #008000;
+      border: 1px solid #014201;
+    }
+    .cancel {
+      background-color: #fa8072;
+      border: 1px solid #fd4e3b;
+    }
+    #selector>.buttons>button {
+      color: white;
+      width: 40px;
+      height: 20px;
+      line-height: 20px;
+      border-radius: 6px;
     }
   </style>
 </head>
@@ -77,6 +93,16 @@
   <div>
     <div class="info-pane"></div>
     <div class="edit-pane"></div>
+  </div>
+
+  <div id="selector">
+    <div class="list">
+
+    </div>
+    <div class="buttons">
+      <button type="button" class="ok">✔</button>
+      <button type="button" class="cancel">✖</button>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
